@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Users</title>
+</head>
+<body>
+<h1>Users</h1>
+<table>
+    <tr>
+        <th>username</th>
+        <th>enabeld</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}">THe User</td>
+        <td th:text="${user.enabled}">enabled</td>
+    </tr>
+</table>
+</body>
+</html>
