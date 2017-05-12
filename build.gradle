@@ -24,6 +24,31 @@ repositories {
 	mavenCentral()
 }
 
+sourceSets {
+    integrationTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/java')
+        }
+        resources.srcDir file('src/integration-test/resources')
+    }
+
+/*
+    // This is just to trick IntelliJ IDEA to add integration test
+    // resources to classpath when running integration tests from
+    // the IDE. It's is not a good solution but I don't know about
+    // a better one.
+    test {
+        resources.srcDir file('src/integration-test/resources')
+    }
+*/
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
@@ -42,3 +67,27 @@ dependencies {
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
+
+test {
+    systemProperty("spring.profiles.active", project.properties.get("springTestProfile")?:'test')
+
+    testLogging {
+        showStandardStreams = false
+        events "passed", "skipped", "failed"
+    }
+}
+
+task integrationTest(type: Test) {
+    def profile = project.properties.get("springTestProfile") ?: 'it'
+    println "Integrationtest will use Spring profile ${profile}"
+    systemProperty("spring.profiles.active", profile)
+
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+//    outputs.upToDateWhen { false }
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+defaultTasks 'build'

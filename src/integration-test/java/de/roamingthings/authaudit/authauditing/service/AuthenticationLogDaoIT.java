@@ -2,11 +2,13 @@ package de.roamingthings.authaudit.authauditing.service;
 
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
@@ -23,6 +25,7 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("it")
 public class AuthenticationLogDaoIT {
 
     @Autowired
@@ -30,6 +33,11 @@ public class AuthenticationLogDaoIT {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Before
+    public void setup() {
+        jdbcTemplate.update("DELETE FROM authentication_log");
+    }
 
     @Test
     public void should_save_new_authentication_log() throws Exception {
