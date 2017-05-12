@@ -7,84 +7,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="01_create_table_user" author="asparkowsky">
-        <createTable tableName="user">
-            <column name="id" type="long">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="username" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="password_hash" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="enabled" type="boolean"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="02_create_table_role" author="asparkowsky">
-        <createTable tableName="role">
-            <column name="id" type="long">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="role" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="03_create_table_user_role" author="asparkowsky">
-        <createTable tableName="user_role">
-            <column name="user_id" type="long">
-                <constraints foreignKeyName="fk_user_role_user" referencedTableName="user" referencedColumnNames="id" nullable="false"/>
-            </column>
-            <column name="role_id" type="long">
-                <constraints foreignKeyName="fk_user_role_role" referencedTableName="role" referencedColumnNames="id" nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="04_insert_default_roles" author="asparkowsky">
-        <insert tableName="role">
-            <column name="id" value="1"/>
-            <column name="role" value="ROLE_ADMIN"/>
-        </insert>
-        <insert tableName="role">
-            <column name="id" value="2"/>
-            <column name="role" value="ROLE_USER"/>
-        </insert>
-    </changeSet>
-
-    <changeSet id="05_insert_default_users" author="asparkowsky">
-        <insert tableName="user">
-            <column name="id" value="1"/>
-            <column name="username" value="admin"/>
-            <!-- secret -->
-            <column name="password_hash" value="$2a$06$zNSPvDGbTVsiQ62h.ezSu.0Q0U4mXWn86q1wga7cdMslMf7gS8pDu"/>
-            <column name="enabled" value="true"/>
-        </insert>
-        <insert tableName="user">
-            <column name="id" value="2"/>
-            <column name="username" value="user"/>
-            <!-- simple -->
-            <column name="password_hash" value="$2a$06$ft7ZMDJzgnaJ28EtvG1ZHO8lrTz7tY.iHaGT5iwbkwPAQGQsgGuNu"/>
-            <column name="enabled" value="true"/>
-        </insert>
-    </changeSet>
-    
-    <changeSet id="06_insert_user_roles" author="asparkowsky">
-        <insert tableName="user_role">
-            <column name="user_id" value="1"/>
-            <column name="role_id" value="1"/>
-        </insert>
-        <insert tableName="user_role">
-            <column name="user_id" value="1"/>
-            <column name="role_id" value="2"/>
-        </insert>
-        <insert tableName="user_role">
-            <column name="user_id" value="2"/>
-            <column name="role_id" value="2"/>
-        </insert>
-    </changeSet>
+    <include file="01_user_tables.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="02_user_data.changelog.xml" relativeToChangelogFile="true"/>
+    <include file="03_auditing_log.changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
