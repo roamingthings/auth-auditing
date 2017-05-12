@@ -2,7 +2,6 @@ package de.roamingthings.authaudit.authauditing.service;
 
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
-import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -23,23 +22,23 @@ import static org.mockito.Mockito.*;
 public class AuthenticationLogServiceTest {
 
     @Mock
-    private AuthenticationLogRepository authenticationLogRepository;
+    private AuthenticationLogDao authenticationLogDao;
 
     @Test
     public void should_create_authentication_log() {
         final Long userId = 1L;
-        final AuthenticationLog authenticationLogMock = mock(AuthenticationLog.class);
-        when(authenticationLogRepository.save(any(AuthenticationLog.class))).thenReturn(authenticationLogMock);
+        final String principal = "testPrincipal";
 
-        AuthenticationLogService authenticationLogService = new AuthenticationLogService(Clock.systemDefaultZone(), authenticationLogRepository);
+        AuthenticationLogService authenticationLogService = new AuthenticationLogService(Clock.systemDefaultZone(), authenticationLogDao);
 
-        authenticationLogService.createAuthenticationLogEntryForUserOfType(userId, AuthenticationEventType.LOGGED_IN_SUCCESSFUL);
+        authenticationLogService.createAuthenticationLogEntryForUserOfType(userId, principal, AuthenticationEventType.LOGGED_IN_SUCCESSFUL);
 
         ArgumentCaptor<AuthenticationLog> authenticationLogCaptor = ArgumentCaptor.forClass(AuthenticationLog.class);
 
-        verify(authenticationLogRepository, times(1)).save(authenticationLogCaptor.capture());
+        verify(authenticationLogDao, times(1)).createAuthenticationLog(authenticationLogCaptor.capture());
 
         final AuthenticationLog capturedAuthenticationLog = authenticationLogCaptor.getValue();
         assertThat(capturedAuthenticationLog.getUserId(), is(1L));
+        assertThat(capturedAuthenticationLog.getPrincipal(), is("testPrincipal"));
     }
 }

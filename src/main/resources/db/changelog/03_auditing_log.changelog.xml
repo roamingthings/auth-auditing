@@ -9,19 +9,12 @@
 
     <changeSet id="01_create_table_authentication_log" author="asparkowsky">
         <createTable tableName="authentication_log">
-            <column name="id" type="long">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="user_id" type="long">
-                <constraints nullable="false"/>
-            </column>
+            <column name="principal" type="varchar(255)"/>
+            <column name="user_id" type="long"/>
             <column name="incident_timestamp" type="timestamp">
                 <constraints nullable="false"/>
             </column>
-            <column name="password_hash" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="authentication_event_type" type="boolean">
+            <column name="authentication_event_type" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
