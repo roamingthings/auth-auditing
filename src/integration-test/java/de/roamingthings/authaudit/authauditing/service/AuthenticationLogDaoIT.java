@@ -69,4 +69,23 @@ public class AuthenticationLogDaoIT {
         ));
     }
 
+    @Test
+    public void should_create_and_read_back_authentication_log_by_principalsw() throws Exception {
+        Stream.of(
+                new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_IN_SUCCESSFUL),
+                new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_OUT),
+                new AuthenticationLog(2L, "principalTest", Instant.now(), AuthenticationEventType.ACCOUNT_DISABLED)
+        )
+                .forEach(authenticationLogDao::createAuthenticationLog);
+
+        final List<AuthenticationLog> authenticationLogList = authenticationLogDao.findAllByPrincipal("testPrincipal");
+        assertThat(authenticationLogList, hasSize(2));
+        assertThat(authenticationLogList, hasItems(
+                allOf(hasProperty("principal", is("testPrincipal")),
+                    hasProperty("authenticationEventType", is(AuthenticationEventType.LOGGED_IN_SUCCESSFUL))),
+                allOf(hasProperty("principal", is("testPrincipal")),
+                    hasProperty("authenticationEventType", is(AuthenticationEventType.LOGGED_OUT)))
+        ));
+    }
+
 }

@@ -41,6 +41,9 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
 
     @Override
     public List<AuthenticationLog> findAllByPrincipal(String principal) {
-        return null;
+        return jdbcTemplate.query(
+                "SELECT user_id, principal, incident_timestamp, authentication_event_type FROM authentication_log WHERE principal=?",
+                new Object[]{principal},
+                authenticationLogRowMapper);
     }
 }
