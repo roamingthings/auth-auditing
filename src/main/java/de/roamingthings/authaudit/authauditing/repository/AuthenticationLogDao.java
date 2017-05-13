@@ -12,4 +12,6 @@ public interface AuthenticationLogDao {
     void createAuthenticationLog(AuthenticationLog authenticationLog);
 
     List<AuthenticationLog> findAllByUserId(Long userId);
+
+    List<AuthenticationLog> findAllByPrincipal(String principal);
 }

@@ -4,6 +4,7 @@ import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
 import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDao;
 import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDaoImpl;
+import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogRowMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -30,7 +31,7 @@ public class AuthenticationLogDaoTest {
 
     @Test
     public void should_save() throws Exception {
-        AuthenticationLogDao authenticationLogDao = new AuthenticationLogDaoImpl(jdbcTemplate);
+        AuthenticationLogDao authenticationLogDao = new AuthenticationLogDaoImpl(jdbcTemplate, new AuthenticationLogRowMapper());
         AuthenticationLog authenticationLog = new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_IN_SUCCESSFUL);
 
         authenticationLogDao.createAuthenticationLog(authenticationLog);

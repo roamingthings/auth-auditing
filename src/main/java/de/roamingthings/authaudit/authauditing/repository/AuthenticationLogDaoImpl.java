@@ -1,6 +1,5 @@
 package de.roamingthings.authaudit.authauditing.repository;
 
-import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -15,9 +14,11 @@ import java.util.List;
 @Component
 public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
     private final JdbcTemplate jdbcTemplate;
+    private final AuthenticationLogRowMapper authenticationLogRowMapper;
 
-    public AuthenticationLogDaoImpl(JdbcTemplate jdbcTemplate) {
+    public AuthenticationLogDaoImpl(JdbcTemplate jdbcTemplate, AuthenticationLogRowMapper authenticationLogRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.authenticationLogRowMapper = authenticationLogRowMapper;
     }
 
     @Override
@@ -35,15 +36,11 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
         return jdbcTemplate.query(
                 "SELECT user_id, principal, incident_timestamp, authentication_event_type FROM authentication_log WHERE user_id=?",
                 new Object[]{userId},
-                (resultSet, rowNum) -> {
-                    AuthenticationLog authenticationLog = new AuthenticationLog(
-                            resultSet.getLong(1),
-                            resultSet.getString(2),
-                            resultSet.getTimestamp(3).toInstant(),
-                            AuthenticationEventType.valueOf(resultSet.getString(4))
-                    );
+                authenticationLogRowMapper);
+    }
 
-                    return authenticationLog;
-                });
+    @Override
+    public List<AuthenticationLog> findAllByPrincipal(String principal) {
+        return null;
     }
 }
