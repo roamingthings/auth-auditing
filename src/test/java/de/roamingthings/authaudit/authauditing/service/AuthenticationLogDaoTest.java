@@ -2,6 +2,8 @@ package de.roamingthings.authaudit.authauditing.service;
 
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
+import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDao;
+import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDaoImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;

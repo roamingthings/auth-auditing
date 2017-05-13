@@ -1,4 +1,4 @@
-package de.roamingthings.authaudit.authauditing.service;
+package de.roamingthings.authaudit.authauditing.repository;
 
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
 

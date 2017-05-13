@@ -2,6 +2,7 @@ package de.roamingthings.authaudit.authauditing.service;
 
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
+import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
