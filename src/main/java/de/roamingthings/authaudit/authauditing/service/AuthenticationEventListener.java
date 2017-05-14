@@ -2,11 +2,13 @@ package de.roamingthings.authaudit.authauditing.service;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
-import org.springframework.security.authentication.event.AbstractAuthenticationFailureEvent;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
+
+import java.time.Clock;
 
 /**
  * @author Alexander Sparkowsky [info@roamingthings.de]
@@ -17,16 +19,27 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
 
     private static Logger logger = LogManager.getLogger(AuthenticationEventListener.class);
 
+    private final Clock systemClock;
+    private final AuthenticationLogService authenticationLogService;
+
+    @Autowired
+    public AuthenticationEventListener(Clock systemClock, AuthenticationLogService authenticationLogService) {
+        this.systemClock = systemClock;
+        this.authenticationLogService = authenticationLogService;
+    }
+
     @Override
     public void onApplicationEvent(AbstractAuthenticationEvent abstractAuthenticationEvent) {
-
-        if (abstractAuthenticationEvent instanceof AbstractAuthenticationFailureEvent) {
-
-            logger.warn("Detected an invalid login");
-
-        } else if (abstractAuthenticationEvent instanceof AuthenticationSuccessEvent) {
-
-            logger.info("A user logged in successfully");
+        final Object principal = abstractAuthenticationEvent.getSource();
+        String username = null;
+        if (principal instanceof UsernamePasswordAuthenticationToken) {
+            UsernamePasswordAuthenticationToken userPrincipal = (UsernamePasswordAuthenticationToken) principal;
+            username = userPrincipal.getName();
         }
+
+        authenticationLogService.createAuthenticationLogEntryForUserOfType(
+                null,
+                username,
+                abstractAuthenticationEvent);
     }
 }
