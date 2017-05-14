@@ -1,0 +1,25 @@
+spring:
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: true
+    jackson:
+        serialization:
+          indent_output: true
+    datasource:
+        url: jdbc:h2:file:./build/db/authaudit-dev;DB_CLOSE_DELAY=-1
+        username: sa
+        password:
+        driver-class-name: org.h2.Driver
+        platform: h2
+    h2:
+        console:
+            enabled: true
+            path: /console
+    jpa:
+        database: H2
+        show-sql: true
+        hibernate:
+            ddl-auto: none
+logging.level.liquibase: DEBUG
