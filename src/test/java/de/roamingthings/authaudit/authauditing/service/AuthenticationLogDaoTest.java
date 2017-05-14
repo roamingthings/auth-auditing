@@ -1,6 +1,5 @@
 package de.roamingthings.authaudit.authauditing.service;
 
-import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
 import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDao;
 import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDaoImpl;
@@ -11,6 +10,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 
 import java.time.Instant;
 
@@ -32,7 +32,7 @@ public class AuthenticationLogDaoTest {
     @Test
     public void should_save() throws Exception {
         AuthenticationLogDao authenticationLogDao = new AuthenticationLogDaoImpl(jdbcTemplate, new AuthenticationLogRowMapper());
-        AuthenticationLog authenticationLog = new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_IN_SUCCESSFUL);
+        AuthenticationLog authenticationLog = AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class);
 
         authenticationLogDao.createAuthenticationLog(authenticationLog);
 

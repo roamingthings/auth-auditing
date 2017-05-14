@@ -1,6 +1,5 @@
 package de.roamingthings.authaudit.authauditing.repository;
 
-import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class AuthenticationLogRowMapper implements RowMapper<AuthenticationLog> 
                 resultSet.getLong(1),
                 resultSet.getString(2),
                 resultSet.getTimestamp(3).toInstant(),
-                AuthenticationEventType.valueOf(resultSet.getString(4))
+                resultSet.getString(4)
         );
 
         return authenticationLog;

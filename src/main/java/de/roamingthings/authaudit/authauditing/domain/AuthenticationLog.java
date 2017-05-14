@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
 
 import java.time.Instant;
 
@@ -22,13 +23,23 @@ public class AuthenticationLog {
 
     private Instant incidentTimestamp;
 
-    private AuthenticationEventType authenticationEventType;
+    private String authenticationEventType;
 
-    public AuthenticationLog(Long userId, String principal, Instant incidentTimestamp, AuthenticationEventType authenticationEventType) {
+    public AuthenticationLog(Long userId, String principal, Instant incidentTimestamp, String authenticationEventType) {
         this.userId = userId;
         this.principal = principal;
         this.incidentTimestamp = incidentTimestamp;
         this.authenticationEventType = authenticationEventType;
+    }
+
+    public static AuthenticationLog of(
+            Long userId, String principal, Instant incidentTimestamp, Class<? extends AbstractAuthenticationEvent> eventClass) {
+        return new AuthenticationLog(
+                userId,
+                principal,
+                incidentTimestamp,
+                eventClass.getName()
+        );
     }
 
 }

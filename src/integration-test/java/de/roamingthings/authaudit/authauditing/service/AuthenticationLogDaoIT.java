@@ -1,6 +1,5 @@
 package de.roamingthings.authaudit.authauditing.service;
 
-import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
 import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDao;
 import org.junit.Before;
@@ -9,6 +8,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
+import org.springframework.security.authentication.event.AuthenticationFailureLockedEvent;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -42,7 +44,7 @@ public class AuthenticationLogDaoIT {
 
     @Test
     public void should_save_new_authentication_log() throws Exception {
-        AuthenticationLog authenticationLog = new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_IN_SUCCESSFUL);
+        AuthenticationLog authenticationLog = new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class.getSimpleName());
 
         authenticationLogDao.createAuthenticationLog(authenticationLog);
 
@@ -53,9 +55,9 @@ public class AuthenticationLogDaoIT {
     @Test
     public void should_create_and_read_back_authentication_log() throws Exception {
         Stream.of(
-                new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_IN_SUCCESSFUL),
-                new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_OUT),
-                new AuthenticationLog(2L, "principalTest", Instant.now(), AuthenticationEventType.ACCOUNT_DISABLED)
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class),
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationFailureBadCredentialsEvent.class),
+                AuthenticationLog.of(2L, "principalTest", Instant.now(), AuthenticationFailureLockedEvent.class)
         )
                 .forEach(authenticationLogDao::createAuthenticationLog);
 
@@ -63,18 +65,18 @@ public class AuthenticationLogDaoIT {
         assertThat(authenticationLogList, hasSize(2));
         assertThat(authenticationLogList, hasItems(
                 allOf(hasProperty("principal", is("testPrincipal")),
-                    hasProperty("authenticationEventType", is(AuthenticationEventType.LOGGED_IN_SUCCESSFUL))),
+                    hasProperty("authenticationEventType", is(AuthenticationSuccessEvent.class.getName()))),
                 allOf(hasProperty("principal", is("testPrincipal")),
-                    hasProperty("authenticationEventType", is(AuthenticationEventType.LOGGED_OUT)))
+                    hasProperty("authenticationEventType", is(AuthenticationFailureBadCredentialsEvent.class.getName())))
         ));
     }
 
     @Test
-    public void should_create_and_read_back_authentication_log_by_principalsw() throws Exception {
+    public void should_create_and_read_back_authentication_log_by_principals() throws Exception {
         Stream.of(
-                new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_IN_SUCCESSFUL),
-                new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationEventType.LOGGED_OUT),
-                new AuthenticationLog(2L, "principalTest", Instant.now(), AuthenticationEventType.ACCOUNT_DISABLED)
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class),
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationFailureBadCredentialsEvent.class),
+                AuthenticationLog.of(2L, "principalTest", Instant.now(), AuthenticationFailureLockedEvent.class)
         )
                 .forEach(authenticationLogDao::createAuthenticationLog);
 
@@ -82,9 +84,9 @@ public class AuthenticationLogDaoIT {
         assertThat(authenticationLogList, hasSize(2));
         assertThat(authenticationLogList, hasItems(
                 allOf(hasProperty("principal", is("testPrincipal")),
-                    hasProperty("authenticationEventType", is(AuthenticationEventType.LOGGED_IN_SUCCESSFUL))),
+                        hasProperty("authenticationEventType", is(AuthenticationSuccessEvent.class.getName()))),
                 allOf(hasProperty("principal", is("testPrincipal")),
-                    hasProperty("authenticationEventType", is(AuthenticationEventType.LOGGED_OUT)))
+                        hasProperty("authenticationEventType", is(AuthenticationFailureBadCredentialsEvent.class.getName())))
         ));
     }
 

@@ -1,8 +1,8 @@
 package de.roamingthings.authaudit.authauditing.service;
 
-import de.roamingthings.authaudit.authauditing.domain.AuthenticationEventType;
 import de.roamingthings.authaudit.authauditing.domain.AuthenticationLog;
 import de.roamingthings.authaudit.authauditing.repository.AuthenticationLogDao;
+import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +24,8 @@ public class AuthenticationLogService {
     }
 
     @Transactional
-    public void createAuthenticationLogEntryForUserOfType(Long userId, String principal, AuthenticationEventType authenticationEventType) {
-        AuthenticationLog authenticationLog = new AuthenticationLog(userId, principal, Instant.now(systemClock), authenticationEventType);
+    public void createAuthenticationLogEntryForUserOfType(Long userId, String principal, AbstractAuthenticationEvent authenticationEvent) {
+        AuthenticationLog authenticationLog = AuthenticationLog.of(userId, principal, Instant.now(systemClock), authenticationEvent.getClass());
         authenticationLogDao.createAuthenticationLog(authenticationLog);
     }
 }

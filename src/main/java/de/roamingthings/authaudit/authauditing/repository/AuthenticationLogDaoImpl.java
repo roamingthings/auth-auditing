@@ -28,7 +28,7 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
                 authenticationLog.getUserId(),
                 authenticationLog.getPrincipal(),
                 new Timestamp(authenticationLog.getIncidentTimestamp().toEpochMilli()),
-                authenticationLog.getAuthenticationEventType().name());
+                authenticationLog.getAuthenticationEventType());
     }
 
     @Override
