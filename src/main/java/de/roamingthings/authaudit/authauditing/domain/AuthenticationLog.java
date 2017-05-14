@@ -25,20 +25,24 @@ public class AuthenticationLog {
 
     private String authenticationEventType;
 
-    public AuthenticationLog(Long userId, String principal, Instant incidentTimestamp, String authenticationEventType) {
+    private boolean authenticated;
+
+    public AuthenticationLog(Long userId, String principal, Instant incidentTimestamp, String authenticationEventType, boolean authenticated) {
         this.userId = userId;
         this.principal = principal;
         this.incidentTimestamp = incidentTimestamp;
         this.authenticationEventType = authenticationEventType;
+        this.authenticated = authenticated;
     }
 
     public static AuthenticationLog of(
-            Long userId, String principal, Instant incidentTimestamp, Class<? extends AbstractAuthenticationEvent> eventClass) {
+            Long userId, String principal, Instant incidentTimestamp, Class<? extends AbstractAuthenticationEvent> eventClass, boolean authenticated) {
         return new AuthenticationLog(
                 userId,
                 principal,
                 incidentTimestamp,
-                eventClass.getName()
+                eventClass.getName(),
+                authenticated
         );
     }
 

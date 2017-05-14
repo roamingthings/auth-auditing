@@ -19,27 +19,30 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
 
     private static Logger logger = LogManager.getLogger(AuthenticationEventListener.class);
 
-    private final Clock systemClock;
     private final AuthenticationLogService authenticationLogService;
 
     @Autowired
     public AuthenticationEventListener(Clock systemClock, AuthenticationLogService authenticationLogService) {
-        this.systemClock = systemClock;
         this.authenticationLogService = authenticationLogService;
     }
 
     @Override
     public void onApplicationEvent(AbstractAuthenticationEvent abstractAuthenticationEvent) {
-        final Object principal = abstractAuthenticationEvent.getSource();
-        String username = null;
-        if (principal instanceof UsernamePasswordAuthenticationToken) {
-            UsernamePasswordAuthenticationToken userPrincipal = (UsernamePasswordAuthenticationToken) principal;
-            username = userPrincipal.getName();
+        final Object authenticationEventSource = abstractAuthenticationEvent.getSource();
+
+        String username = "<unknown>";
+        boolean authenticated = false;
+
+        if (authenticationEventSource instanceof UsernamePasswordAuthenticationToken) {
+            UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authenticationEventSource;
+            username = authenticationToken.getName();
+            authenticated = authenticationToken.isAuthenticated();
         }
 
         authenticationLogService.createAuthenticationLogEntryForUserOfType(
                 null,
                 username,
-                abstractAuthenticationEvent);
+                abstractAuthenticationEvent,
+                authenticated);
     }
 }

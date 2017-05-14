@@ -16,12 +16,13 @@ public class AuthenticationLogTest {
     @Test
     public void should_create_authentication_log_of_event_class() throws Exception {
         final Instant incidentTimestamp = Instant.now();
-        final AuthenticationLog authenticationLog = AuthenticationLog.of(1L, "principal", incidentTimestamp, AuthenticationSuccessEvent.class);
+        final AuthenticationLog authenticationLog = AuthenticationLog.of(1L, "principal", incidentTimestamp, AuthenticationSuccessEvent.class, true);
 
         assertThat(authenticationLog.getUserId(), is(1L));
         assertThat(authenticationLog.getPrincipal(), is("principal"));
         assertThat(authenticationLog.getIncidentTimestamp(), is(incidentTimestamp));
         assertThat(authenticationLog.getAuthenticationEventType(), is("org.springframework.security.authentication.event.AuthenticationSuccessEvent"));
+        assertThat(authenticationLog.isAuthenticated(), is(true));
     }
 
 }

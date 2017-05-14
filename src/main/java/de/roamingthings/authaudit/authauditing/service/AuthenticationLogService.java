@@ -24,8 +24,8 @@ public class AuthenticationLogService {
     }
 
     @Transactional
-    public void createAuthenticationLogEntryForUserOfType(Long userId, String principal, AbstractAuthenticationEvent authenticationEvent) {
-        AuthenticationLog authenticationLog = AuthenticationLog.of(userId, principal, Instant.now(systemClock), authenticationEvent.getClass());
+    public void createAuthenticationLogEntryForUserOfType(Long userId, String principal, AbstractAuthenticationEvent authenticationEvent, boolean authenticated) {
+        AuthenticationLog authenticationLog = AuthenticationLog.of(userId, principal, Instant.now(systemClock), authenticationEvent.getClass(), authenticated);
         authenticationLogDao.createAuthenticationLog(authenticationLog);
     }
 }

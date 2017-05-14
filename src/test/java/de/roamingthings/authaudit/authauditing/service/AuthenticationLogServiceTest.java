@@ -34,7 +34,7 @@ public class AuthenticationLogServiceTest {
 
         AuthenticationLogService authenticationLogService = new AuthenticationLogService(Clock.systemDefaultZone(), authenticationLogDao);
 
-        authenticationLogService.createAuthenticationLogEntryForUserOfType(userId, principal, authenticationEventMock);
+        authenticationLogService.createAuthenticationLogEntryForUserOfType(userId, principal, authenticationEventMock, true);
 
         ArgumentCaptor<AuthenticationLog> authenticationLogCaptor = ArgumentCaptor.forClass(AuthenticationLog.class);
 
@@ -43,5 +43,7 @@ public class AuthenticationLogServiceTest {
         final AuthenticationLog capturedAuthenticationLog = authenticationLogCaptor.getValue();
         assertThat(capturedAuthenticationLog.getUserId(), is(1L));
         assertThat(capturedAuthenticationLog.getPrincipal(), is("testPrincipal"));
+        assertThat(capturedAuthenticationLog.getAuthenticationEventType(), is("org.springframework.security.authentication.event.AuthenticationSuccessEvent"));
+        assertThat(capturedAuthenticationLog.isAuthenticated(), is(true));
     }
 }

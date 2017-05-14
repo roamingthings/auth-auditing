@@ -32,7 +32,7 @@ public class AuthenticationLogDaoTest {
     @Test
     public void should_save() throws Exception {
         AuthenticationLogDao authenticationLogDao = new AuthenticationLogDaoImpl(jdbcTemplate, new AuthenticationLogRowMapper());
-        AuthenticationLog authenticationLog = AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class);
+        AuthenticationLog authenticationLog = AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class, true);
 
         authenticationLogDao.createAuthenticationLog(authenticationLog);
 
@@ -43,8 +43,8 @@ public class AuthenticationLogDaoTest {
                 queryCaptor.capture(),
                 parametersCaptor.capture());
 
-        assertThat(queryCaptor.getValue(), containsString("INSERT INTO authentication_log (user_id, principal, incident_timestamp, authentication_event_type) VALUES (?, ?, ?, ?)"));
-//        assertThat(parametersCaptor.getValue(), hasItems(authenticationLog.getUserId(), authenticationLog.getPrincipal(), authenticationLog.getIncidentTimestamp(), authenticationLog.getAuthenticationEventType()));
+        assertThat(queryCaptor.getValue(), containsString("INSERT INTO authentication_log (user_id, principal, incident_timestamp, authentication_event_type, authenticated) VALUES (?, ?, ?, ?, ?)"));
+//        assertThat(parametersCaptor.getValue(), hasItems(authenticationLog.getUserId(), authenticationLog.getPrincipal(), authenticationLog.getIncidentTimestamp(), authenticationLog.getAuthenticationEventType(), true));
     }
 
 }

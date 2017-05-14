@@ -19,7 +19,8 @@ public class AuthenticationLogRowMapper implements RowMapper<AuthenticationLog> 
                 resultSet.getLong(1),
                 resultSet.getString(2),
                 resultSet.getTimestamp(3).toInstant(),
-                resultSet.getString(4)
+                resultSet.getString(4),
+                resultSet.getBoolean(5)
         );
 
         return authenticationLog;

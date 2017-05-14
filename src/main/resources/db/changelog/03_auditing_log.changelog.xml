@@ -17,6 +17,7 @@
             <column name="authentication_event_type" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="authenticated" type="boolean"/>
         </createTable>
     </changeSet>
 

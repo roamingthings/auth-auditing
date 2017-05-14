@@ -44,7 +44,7 @@ public class AuthenticationLogDaoIT {
 
     @Test
     public void should_save_new_authentication_log() throws Exception {
-        AuthenticationLog authenticationLog = new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class.getSimpleName());
+        AuthenticationLog authenticationLog = new AuthenticationLog(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class.getSimpleName(), true);
 
         authenticationLogDao.createAuthenticationLog(authenticationLog);
 
@@ -55,9 +55,9 @@ public class AuthenticationLogDaoIT {
     @Test
     public void should_create_and_read_back_authentication_log() throws Exception {
         Stream.of(
-                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class),
-                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationFailureBadCredentialsEvent.class),
-                AuthenticationLog.of(2L, "principalTest", Instant.now(), AuthenticationFailureLockedEvent.class)
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class, true),
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationFailureBadCredentialsEvent.class, false),
+                AuthenticationLog.of(2L, "principalTest", Instant.now(), AuthenticationFailureLockedEvent.class, false)
         )
                 .forEach(authenticationLogDao::createAuthenticationLog);
 
@@ -65,18 +65,21 @@ public class AuthenticationLogDaoIT {
         assertThat(authenticationLogList, hasSize(2));
         assertThat(authenticationLogList, hasItems(
                 allOf(hasProperty("principal", is("testPrincipal")),
-                    hasProperty("authenticationEventType", is(AuthenticationSuccessEvent.class.getName()))),
+                        hasProperty("authenticationEventType", is(AuthenticationSuccessEvent.class.getName())),
+                        hasProperty("authenticated", is(true))
+                ),
                 allOf(hasProperty("principal", is("testPrincipal")),
-                    hasProperty("authenticationEventType", is(AuthenticationFailureBadCredentialsEvent.class.getName())))
+                        hasProperty("authenticationEventType", is(AuthenticationFailureBadCredentialsEvent.class.getName())),
+                        hasProperty("authenticated", is(false)))
         ));
     }
 
     @Test
     public void should_create_and_read_back_authentication_log_by_principals() throws Exception {
         Stream.of(
-                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class),
-                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationFailureBadCredentialsEvent.class),
-                AuthenticationLog.of(2L, "principalTest", Instant.now(), AuthenticationFailureLockedEvent.class)
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationSuccessEvent.class, true),
+                AuthenticationLog.of(1L, "testPrincipal", Instant.now(), AuthenticationFailureBadCredentialsEvent.class, false),
+                AuthenticationLog.of(2L, "principalTest", Instant.now(), AuthenticationFailureLockedEvent.class, false)
         )
                 .forEach(authenticationLogDao::createAuthenticationLog);
 
@@ -84,9 +87,12 @@ public class AuthenticationLogDaoIT {
         assertThat(authenticationLogList, hasSize(2));
         assertThat(authenticationLogList, hasItems(
                 allOf(hasProperty("principal", is("testPrincipal")),
-                        hasProperty("authenticationEventType", is(AuthenticationSuccessEvent.class.getName()))),
+                        hasProperty("authenticationEventType", is(AuthenticationSuccessEvent.class.getName())),
+                        hasProperty("authenticated", is(true))
+                ),
                 allOf(hasProperty("principal", is("testPrincipal")),
-                        hasProperty("authenticationEventType", is(AuthenticationFailureBadCredentialsEvent.class.getName())))
+                        hasProperty("authenticationEventType", is(AuthenticationFailureBadCredentialsEvent.class.getName())),
+                        hasProperty("authenticated", is(false)))
         ));
     }
 

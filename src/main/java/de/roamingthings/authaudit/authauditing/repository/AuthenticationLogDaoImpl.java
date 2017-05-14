@@ -24,17 +24,18 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
     @Override
     public void createAuthenticationLog(AuthenticationLog authenticationLog) {
         jdbcTemplate.update(
-                "INSERT INTO authentication_log (user_id, principal, incident_timestamp, authentication_event_type) VALUES (?, ?, ?, ?)",
+                "INSERT INTO authentication_log (user_id, principal, incident_timestamp, authentication_event_type, authenticated) VALUES (?, ?, ?, ?, ?)",
                 authenticationLog.getUserId(),
                 authenticationLog.getPrincipal(),
                 new Timestamp(authenticationLog.getIncidentTimestamp().toEpochMilli()),
-                authenticationLog.getAuthenticationEventType());
+                authenticationLog.getAuthenticationEventType(),
+                authenticationLog.isAuthenticated());
     }
 
     @Override
     public List<AuthenticationLog> findAllByUserId(Long userId) {
         return jdbcTemplate.query(
-                "SELECT user_id, principal, incident_timestamp, authentication_event_type FROM authentication_log WHERE user_id=?",
+                "SELECT user_id, principal, incident_timestamp, authentication_event_type, authenticated FROM authentication_log WHERE user_id=?",
                 new Object[]{userId},
                 authenticationLogRowMapper);
     }
@@ -42,7 +43,7 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
     @Override
     public List<AuthenticationLog> findAllByPrincipal(String principal) {
         return jdbcTemplate.query(
-                "SELECT user_id, principal, incident_timestamp, authentication_event_type FROM authentication_log WHERE principal=?",
+                "SELECT user_id, principal, incident_timestamp, authentication_event_type, authenticated FROM authentication_log WHERE principal=?",
                 new Object[]{principal},
                 authenticationLogRowMapper);
     }
