@@ -6,6 +6,7 @@ import de.roamingthings.authaudit.authauditing.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -39,5 +40,10 @@ public class UserServiceImpl implements UserService {
             User user = new User(username, passwordHash, true, roleSet);
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public Optional<Long> findUserIdByUsername(String username) {
+        return userRepository.findUserIdByUsername(username);
     }
 }

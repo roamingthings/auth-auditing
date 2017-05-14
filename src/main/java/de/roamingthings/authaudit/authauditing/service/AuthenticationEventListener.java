@@ -1,6 +1,5 @@
 package de.roamingthings.authaudit.authauditing.service;
 
-import de.roamingthings.authaudit.authauditing.domain.User;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +39,7 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
             username = authenticationToken.getName();
             authenticated = authenticationToken.isAuthenticated();
 
-            final User user = userService.findByUsername(username);
-            if (user != null) {
-                userId = user.getId();
-            }
+            userId = userService.findUserIdByUsername(username).orElse(null);
         }
 
         authenticationLogService.createAuthenticationLogEntryForUserOfType(

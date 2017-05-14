@@ -9,7 +9,7 @@
 
     <changeSet id="01_create_table_user" author="asparkowsky">
         <createTable tableName="user">
-            <column name="id" type="long">
+            <column name="id" type="long" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="username" type="varchar(255)">
@@ -24,7 +24,7 @@
 
     <changeSet id="02_create_table_role" author="asparkowsky">
         <createTable tableName="role">
-            <column name="id" type="long">
+            <column name="id" type="long" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="role" type="varchar(255)">
