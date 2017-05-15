@@ -1,6 +1,6 @@
 package de.roamingthings.authaudit.authauditing.repository;
 
-import de.roamingthings.authaudit.authauditing.domain.User;
+import de.roamingthings.authaudit.authauditing.domain.UserAccount;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +23,19 @@ import static org.junit.Assert.assertThat;
 @SpringBootTest
 @DataJpaTest
 @ActiveProfiles("it")
-public class UserRepositoryIT {
+public class UserAccountRepositoryIT {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserAccountRepository userAccountRepository;
 
     @Test
     public void should_find_user_id_of_created_user() throws Exception {
-        User user = new User("user1", "abc", true, Collections.emptySet());
-        final User createdUser = userRepository.save(user);
+        UserAccount userAccount = new UserAccount("user1", "abc", true, Collections.emptySet());
+        final UserAccount createdUserAccount = userAccountRepository.save(userAccount);
 
-        final Optional<Long> foundUserId = userRepository.findUserIdByUsername(user.getUsername());
+        final Optional<Long> foundUserId = userAccountRepository.findUserIdByUsername(userAccount.getUsername());
         assertThat(foundUserId.isPresent(), is(true));
-        assertThat(foundUserId.get(), is(createdUser.getId()));
+        assertThat(foundUserId.get(), is(createdUserAccount.getId()));
     }
 
 }

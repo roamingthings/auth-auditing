@@ -18,7 +18,7 @@ public class AuthenticationLogTest {
         final Instant incidentTimestamp = Instant.now();
         final AuthenticationLog authenticationLog = AuthenticationLog.of(1L, "principal", incidentTimestamp, AuthenticationSuccessEvent.class, true);
 
-        assertThat(authenticationLog.getUserId(), is(1L));
+        assertThat(authenticationLog.getUserAccountId(), is(1L));
         assertThat(authenticationLog.getPrincipal(), is("principal"));
         assertThat(authenticationLog.getIncidentTimestamp(), is(incidentTimestamp));
         assertThat(authenticationLog.getAuthenticationEventType(), is("org.springframework.security.authentication.event.AuthenticationSuccessEvent"));

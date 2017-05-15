@@ -18,12 +18,12 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
     private static Logger logger = LogManager.getLogger(AuthenticationEventListener.class);
 
     private final AuthenticationLogService authenticationLogService;
-    private final UserService userService;
+    private final UserAccountService userAccountService;
 
     @Autowired
-    public AuthenticationEventListener(AuthenticationLogService authenticationLogService, UserService userService) {
+    public AuthenticationEventListener(AuthenticationLogService authenticationLogService, UserAccountService userAccountService) {
         this.authenticationLogService = authenticationLogService;
-        this.userService = userService;
+        this.userAccountService = userAccountService;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class AuthenticationEventListener implements ApplicationListener<Abstract
             username = authenticationToken.getName();
             authenticated = authenticationToken.isAuthenticated();
 
-            userId = userService.findUserIdByUsername(username).orElse(null);
+            userId = userAccountService.findUserIdByUsername(username).orElse(null);
         }
 
         authenticationLogService.createAuthenticationLogEntryForUserOfType(

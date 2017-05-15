@@ -1,7 +1,7 @@
 package de.roamingthings.authaudit.authauditing.ui;
 
-import de.roamingthings.authaudit.authauditing.domain.User;
-import de.roamingthings.authaudit.authauditing.repository.UserRepository;
+import de.roamingthings.authaudit.authauditing.domain.UserAccount;
+import de.roamingthings.authaudit.authauditing.repository.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,18 +15,18 @@ import java.util.List;
  */
 @Controller
 public class UserController {
-    private UserRepository userRepository;
+    private UserAccountRepository userAccountRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserAccountRepository userAccountRepository) {
+        this.userAccountRepository = userAccountRepository;
     }
 
     @RequestMapping("/users")
     public String listUsers(Model model) {
-        final List<User> allUsers = userRepository.findAll();
+        final List<UserAccount> allUserAccounts = userAccountRepository.findAll();
 
-        model.addAttribute("users", allUsers);
+        model.addAttribute("users", allUserAccounts);
         return "users_list.html";
     }
 }

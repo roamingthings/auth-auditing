@@ -24,8 +24,8 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
     @Override
     public void createAuthenticationLog(AuthenticationLog authenticationLog) {
         jdbcTemplate.update(
-                "INSERT INTO authentication_log (user_id, principal, incident_timestamp, authentication_event_type, authenticated) VALUES (?, ?, ?, ?, ?)",
-                authenticationLog.getUserId(),
+                "INSERT INTO authentication_log (user_account_id, principal, incident_timestamp, authentication_event_type, authenticated) VALUES (?, ?, ?, ?, ?)",
+                authenticationLog.getUserAccountId(),
                 authenticationLog.getPrincipal(),
                 new Timestamp(authenticationLog.getIncidentTimestamp().toEpochMilli()),
                 authenticationLog.getAuthenticationEventType(),
@@ -35,7 +35,7 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
     @Override
     public List<AuthenticationLog> findAllByUserId(Long userId) {
         return jdbcTemplate.query(
-                "SELECT user_id, principal, incident_timestamp, authentication_event_type, authenticated FROM authentication_log WHERE user_id=?",
+                "SELECT user_account_id, principal, incident_timestamp, authentication_event_type, authenticated FROM authentication_log WHERE user_account_id=?",
                 new Object[]{userId},
                 authenticationLogRowMapper);
     }
@@ -43,7 +43,7 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
     @Override
     public List<AuthenticationLog> findAllByPrincipal(String principal) {
         return jdbcTemplate.query(
-                "SELECT user_id, principal, incident_timestamp, authentication_event_type, authenticated FROM authentication_log WHERE principal=?",
+                "SELECT user_account_id, principal, incident_timestamp, authentication_event_type, authenticated FROM authentication_log WHERE principal=?",
                 new Object[]{principal},
                 authenticationLogRowMapper);
     }

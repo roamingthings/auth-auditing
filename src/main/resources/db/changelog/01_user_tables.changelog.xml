@@ -7,8 +7,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="01_create_table_user" author="asparkowsky">
-        <createTable tableName="user">
+    <changeSet id="01_create_table_user_account" author="asparkowsky">
+        <createTable tableName="user_account">
             <column name="id" type="long" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -33,10 +33,10 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="03_create_table_user_role" author="asparkowsky">
-        <createTable tableName="user_role">
-            <column name="user_id" type="long">
-                <constraints foreignKeyName="fk_user_role_user" referencedTableName="user" referencedColumnNames="id" nullable="false"/>
+    <changeSet id="03_create_table_user_account_role" author="asparkowsky">
+        <createTable tableName="user_account_role">
+            <column name="user_account_id" type="long">
+                <constraints foreignKeyName="fk_user_role_user_account" referencedTableName="user_account" referencedColumnNames="id" nullable="false"/>
             </column>
             <column name="role_id" type="long">
                 <constraints foreignKeyName="fk_user_role_role" referencedTableName="role" referencedColumnNames="id" nullable="false"/>

@@ -3,6 +3,7 @@ package de.roamingthings.authaudit.authauditing.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -15,7 +16,8 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-public class User {
+@Table(name = "user_account")
+public class UserAccount {
     @Id
     @GeneratedValue
     private Long id;
@@ -34,10 +36,10 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     // ~ defaults to @JoinTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "user_id"),
     //     inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JoinTable(name = "USER_ROLE", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "USER_ACCOUNT_ROLE", joinColumns = @JoinColumn(name = "user_account_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public User(String username, String passwordHash, boolean enabled, Set<Role> roles) {
+    public UserAccount(String username, String passwordHash, boolean enabled, Set<Role> roles) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.enabled = enabled;

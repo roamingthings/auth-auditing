@@ -18,15 +18,15 @@
         </insert>
     </changeSet>
 
-    <changeSet id="05_insert_default_users" author="asparkowsky">
-        <insert tableName="user">
+    <changeSet id="05_insert_default_users_account" author="asparkowsky">
+        <insert tableName="user_account">
             <column name="id" value="1"/>
             <column name="username" value="admin"/>
             <!-- secret -->
             <column name="password_hash" value="$2a$06$zNSPvDGbTVsiQ62h.ezSu.0Q0U4mXWn86q1wga7cdMslMf7gS8pDu"/>
             <column name="enabled" value="true"/>
         </insert>
-        <insert tableName="user">
+        <insert tableName="user_account">
             <column name="id" value="2"/>
             <column name="username" value="user"/>
             <!-- simple -->
@@ -36,16 +36,16 @@
     </changeSet>
 
     <changeSet id="06_insert_user_roles" author="asparkowsky">
-        <insert tableName="user_role">
-            <column name="user_id" value="1"/>
+        <insert tableName="user_account_role">
+            <column name="user_account_id" value="1"/>
             <column name="role_id" value="1"/>
         </insert>
-        <insert tableName="user_role">
-            <column name="user_id" value="1"/>
+        <insert tableName="user_account_role">
+            <column name="user_account_id" value="1"/>
             <column name="role_id" value="2"/>
         </insert>
-        <insert tableName="user_role">
-            <column name="user_id" value="2"/>
+        <insert tableName="user_account_role">
+            <column name="user_account_id" value="2"/>
             <column name="role_id" value="2"/>
         </insert>
     </changeSet>

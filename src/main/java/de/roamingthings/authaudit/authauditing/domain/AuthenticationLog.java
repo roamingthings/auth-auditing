@@ -17,7 +17,7 @@ import java.time.Instant;
 @ToString
 @EqualsAndHashCode
 public class AuthenticationLog {
-    private Long userId;
+    private Long userAccountId;
 
     private String principal;
 
@@ -27,8 +27,8 @@ public class AuthenticationLog {
 
     private boolean authenticated;
 
-    public AuthenticationLog(Long userId, String principal, Instant incidentTimestamp, String authenticationEventType, boolean authenticated) {
-        this.userId = userId;
+    public AuthenticationLog(Long userAccountId, String principal, Instant incidentTimestamp, String authenticationEventType, boolean authenticated) {
+        this.userAccountId = userAccountId;
         this.principal = principal;
         this.incidentTimestamp = incidentTimestamp;
         this.authenticationEventType = authenticationEventType;
@@ -36,9 +36,9 @@ public class AuthenticationLog {
     }
 
     public static AuthenticationLog of(
-            Long userId, String principal, Instant incidentTimestamp, Class<? extends AbstractAuthenticationEvent> eventClass, boolean authenticated) {
+            Long userAccountId, String principal, Instant incidentTimestamp, Class<? extends AbstractAuthenticationEvent> eventClass, boolean authenticated) {
         return new AuthenticationLog(
-                userId,
+                userAccountId,
                 principal,
                 incidentTimestamp,
                 eventClass.getName(),

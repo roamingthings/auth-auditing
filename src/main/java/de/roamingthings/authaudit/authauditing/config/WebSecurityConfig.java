@@ -1,5 +1,6 @@
 package de.roamingthings.authaudit.authauditing.config;
 
+import de.roamingthings.authaudit.authauditing.service.UserAccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +8,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -21,8 +21,8 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private UserDetailsService userDetailsService;
+    @Autowired
+    private UserAccountDetailsService userAccountDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -45,11 +45,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth, DataSource dataSource) throws Exception {
         auth
-//                .userDetailsService(userDetailsService)
-//                .and()
                 .jdbcAuthentication()
-                .usersByUsernameQuery("SELECT username, password_hash, enabled FROM user WHERE username=?")
-                .authoritiesByUsernameQuery("SELECT u.username, r.role FROM user u LEFT JOIN user_role ur ON u.id = ur.user_id LEFT JOIN role r on ur.role_id = r.id where u.username=?")
+                .usersByUsernameQuery("SELECT username, password_hash, enabled FROM user_account WHERE username=?")
+                .authoritiesByUsernameQuery("SELECT u.username, r.role FROM user_account u LEFT JOIN user_account_role ur ON u.id = ur.user_account_id LEFT JOIN role r on ur.role_id = r.id where u.username=?")
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder());
     }

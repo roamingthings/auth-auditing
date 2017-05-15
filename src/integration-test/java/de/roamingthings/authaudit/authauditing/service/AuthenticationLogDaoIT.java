@@ -48,7 +48,7 @@ public class AuthenticationLogDaoIT {
 
         authenticationLogDao.createAuthenticationLog(authenticationLog);
 
-        final Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM authentication_log WHERE user_id=?", new Object[]{1L}, Integer.class);
+        final Integer count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM authentication_log WHERE user_account_id=?", new Object[]{1L}, Integer.class);
         assertThat(count, is(1));
     }
 

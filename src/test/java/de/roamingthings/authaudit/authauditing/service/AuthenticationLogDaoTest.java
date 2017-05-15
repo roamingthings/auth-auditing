@@ -43,8 +43,8 @@ public class AuthenticationLogDaoTest {
                 queryCaptor.capture(),
                 parametersCaptor.capture());
 
-        assertThat(queryCaptor.getValue(), containsString("INSERT INTO authentication_log (user_id, principal, incident_timestamp, authentication_event_type, authenticated) VALUES (?, ?, ?, ?, ?)"));
-//        assertThat(parametersCaptor.getValue(), hasItems(authenticationLog.getUserId(), authenticationLog.getPrincipal(), authenticationLog.getIncidentTimestamp(), authenticationLog.getAuthenticationEventType(), true));
+        assertThat(queryCaptor.getValue(), containsString("INSERT INTO authentication_log (user_account_id, principal, incident_timestamp, authentication_event_type, authenticated) VALUES (?, ?, ?, ?, ?)"));
+//        assertThat(parametersCaptor.getValue(), hasItems(authenticationLog.getUserAccountId(), authenticationLog.getPrincipal(), authenticationLog.getIncidentTimestamp(), authenticationLog.getAuthenticationEventType(), true));
     }
 
 }

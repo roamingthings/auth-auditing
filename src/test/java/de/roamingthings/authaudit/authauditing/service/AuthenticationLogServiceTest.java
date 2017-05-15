@@ -41,7 +41,7 @@ public class AuthenticationLogServiceTest {
         verify(authenticationLogDao, times(1)).createAuthenticationLog(authenticationLogCaptor.capture());
 
         final AuthenticationLog capturedAuthenticationLog = authenticationLogCaptor.getValue();
-        assertThat(capturedAuthenticationLog.getUserId(), is(1L));
+        assertThat(capturedAuthenticationLog.getUserAccountId(), is(1L));
         assertThat(capturedAuthenticationLog.getPrincipal(), is("testPrincipal"));
         assertThat(capturedAuthenticationLog.getAuthenticationEventType(), is("org.springframework.security.authentication.event.AuthenticationSuccessEvent"));
         assertThat(capturedAuthenticationLog.isAuthenticated(), is(true));

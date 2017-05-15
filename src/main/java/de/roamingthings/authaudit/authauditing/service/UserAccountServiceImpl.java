@@ -1,8 +1,8 @@
 package de.roamingthings.authaudit.authauditing.service;
 
 import de.roamingthings.authaudit.authauditing.domain.Role;
-import de.roamingthings.authaudit.authauditing.domain.User;
-import de.roamingthings.authaudit.authauditing.repository.UserRepository;
+import de.roamingthings.authaudit.authauditing.domain.UserAccount;
+import de.roamingthings.authaudit.authauditing.repository.UserAccountRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,33 +17,33 @@ import static java.util.stream.Collectors.toSet;
  * @version 2017/05/03
  */
 @Service
-public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+public class UserAccountServiceImpl implements UserAccountService {
+    private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
+        this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserAccount findByUsername(String username) {
+        return userAccountRepository.findByUsername(username);
     }
 
     @Override
     public void addEnabledUserWithRolesIfNotExists(String username, String password, Role... roles) {
-        if (!userRepository.existsByUsername(username)) {
+        if (!userAccountRepository.existsByUsername(username)) {
             final String passwordHash = passwordEncoder.encode(password);
 
             final Set<Role> roleSet = Stream.of(roles).collect(toSet());
-            User user = new User(username, passwordHash, true, roleSet);
-            userRepository.save(user);
+            UserAccount userAccount = new UserAccount(username, passwordHash, true, roleSet);
+            userAccountRepository.save(userAccount);
         }
     }
 
     @Override
     public Optional<Long> findUserIdByUsername(String username) {
-        return userRepository.findUserIdByUsername(username);
+        return userAccountRepository.findUserIdByUsername(username);
     }
 }

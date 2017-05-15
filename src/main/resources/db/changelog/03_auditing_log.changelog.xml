@@ -10,7 +10,7 @@
     <changeSet id="01_create_table_authentication_log" author="asparkowsky">
         <createTable tableName="authentication_log">
             <column name="principal" type="varchar(255)"/>
-            <column name="user_id" type="long"/>
+            <column name="user_account_id" type="long"/>
             <column name="incident_timestamp" type="timestamp">
                 <constraints nullable="false"/>
             </column>

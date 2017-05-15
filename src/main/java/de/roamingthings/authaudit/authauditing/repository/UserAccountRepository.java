@@ -1,6 +1,6 @@
 package de.roamingthings.authaudit.authauditing.repository;
 
-import de.roamingthings.authaudit.authauditing.domain.User;
+import de.roamingthings.authaudit.authauditing.domain.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +13,11 @@ import java.util.Optional;
  * @version 2017/05/03
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByUsername(String username);
+public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
+    UserAccount findByUsername(String username);
 
     boolean existsByUsername(String username);
 
-    @Query("SELECT u.id FROM User u where u.username = :username")
+    @Query("SELECT u.id FROM UserAccount u where u.username = :username")
     Optional<Long> findUserIdByUsername(@Param("username") String username);
 }
