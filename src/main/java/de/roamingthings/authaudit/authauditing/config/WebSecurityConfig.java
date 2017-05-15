@@ -45,6 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth, DataSource dataSource) throws Exception {
         auth
+                .userDetailsService(userAccountDetailsService)
+                .and()
                 .jdbcAuthentication()
                 .usersByUsernameQuery("SELECT username, password_hash, enabled FROM user_account WHERE username=?")
                 .authoritiesByUsernameQuery("SELECT u.username, r.role FROM user_account u LEFT JOIN user_account_role ur ON u.id = ur.user_account_id LEFT JOIN role r on ur.role_id = r.id where u.username=?")
