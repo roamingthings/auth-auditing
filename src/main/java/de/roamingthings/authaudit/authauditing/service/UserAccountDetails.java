@@ -5,7 +5,6 @@ import de.roamingthings.authaudit.authauditing.domain.UserAccount;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,15 +16,30 @@ import static java.util.stream.Collectors.toList;
  * @version 2017/05/15
  */
 public class UserAccountDetails extends User {
-    public UserAccountDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-        super(username, password, authorities);
+    private Long userId;
+
+    public UserAccountDetails(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities, Long userId) {
+        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
+        this.userId = userId;
     }
 
-    public static UserDetails of(UserAccount userAccount) {
-        return new UserAccountDetails(
+    public UserAccountDetails(Long userId, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
+        this.userId = userId;
+    }
+
+    public static UserAccountDetails of(UserAccount userAccount, boolean nonLocked) {
+        final UserAccountDetails userAccountDetails = new UserAccountDetails(
                 userAccount.getUsername(),
                 userAccount.getPasswordHash(),
-                grantedAuthorities(userAccount));
+                true,
+                false,
+                false,
+                nonLocked,
+                grantedAuthorities(userAccount),
+                userAccount.getId()
+                );
+        return userAccountDetails;
     }
 
     private static List<GrantedAuthority> grantedAuthorities(UserAccount userAccount) {
@@ -33,5 +47,9 @@ public class UserAccountDetails extends User {
                 .map(Role::getRole)
                 .map(SimpleGrantedAuthority::new)
                 .collect(toList());
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

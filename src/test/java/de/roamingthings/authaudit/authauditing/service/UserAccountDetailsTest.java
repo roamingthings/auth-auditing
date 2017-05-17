@@ -3,7 +3,6 @@ package de.roamingthings.authaudit.authauditing.service;
 import de.roamingthings.authaudit.authauditing.domain.Role;
 import de.roamingthings.authaudit.authauditing.domain.UserAccount;
 import org.junit.Test;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.stream.Stream;
 
@@ -26,9 +25,11 @@ public class UserAccountDetailsTest {
                 true,
                 Stream.of("ROLE_USER", "ROLE_ADMIN").map(Role::new).collect(toSet())
         );
+        userAccount.setId(1L);
 
-        final UserDetails userDetails = UserAccountDetails.of(userAccount);
+        final UserAccountDetails userDetails = UserAccountDetails.of(userAccount);
 
+        assertThat(userDetails.getUserId(), is(userAccount.getId()));
         assertThat(userDetails.getUsername(), is(userAccount.getUsername()));
         assertThat(userDetails.getAuthorities(), hasItems(
                 hasProperty("authority", is("ROLE_USER")),

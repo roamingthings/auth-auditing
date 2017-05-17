@@ -47,4 +47,12 @@ public class AuthenticationLogDaoImpl implements AuthenticationLogDao {
                 new Object[]{principal},
                 authenticationLogRowMapper);
     }
+
+    @Override
+    public List<AuthenticationLog> findByUserIdOrderedByIncidentTimestampDesc(Long userId, int limit) {
+        return jdbcTemplate.query(
+                "SELECT user_account_id, principal, incident_timestamp, authentication_event_type, authenticated FROM authentication_log WHERE user_account_id=? ORDER BY incident_timestamp DESC LIMIT ?",
+                new Object[]{userId, limit},
+                authenticationLogRowMapper);
+    }
 }

@@ -16,10 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class UserAccountAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
     private final UserAccountRepository userAccountRepository;
+    private final AuthenticationLogService authenticationLogService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserAccountAuthenticationProvider(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
+    public UserAccountAuthenticationProvider(UserAccountRepository userAccountRepository, AuthenticationLogService authenticationLogService, PasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
+        this.authenticationLogService = authenticationLogService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -38,6 +40,9 @@ public class UserAccountAuthenticationProvider extends AbstractUserDetailsAuthen
             throw new UsernameNotFoundException("No user account matches the combination of username and credentials");
         }
 
-        return UserAccountDetails.of(userAccount);
+        return UserAccountDetails.of(
+                userAccount,
+                (authenticationLogService.unsuccessfulAuthenticationSeriesSize(userAccount.getId(), 5) < 5)
+        );
     }
 }

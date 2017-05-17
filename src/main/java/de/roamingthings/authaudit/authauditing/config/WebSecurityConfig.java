@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationProvider userAccountAuthenticationProvider() {
-        UserAccountAuthenticationProvider userAccountAuthenticationProvider = new UserAccountAuthenticationProvider(userAccountRepository, passwordEncoder);
+        UserAccountAuthenticationProvider userAccountAuthenticationProvider = new UserAccountAuthenticationProvider(userAccountRepository, authenticationLogService, passwordEncoder);
         userAccountAuthenticationProvider.setPostAuthenticationChecks(new UserAccountPostAuthenticationChecker(authenticationLogService));
 
         return userAccountAuthenticationProvider;

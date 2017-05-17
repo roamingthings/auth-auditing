@@ -32,7 +32,7 @@ public class AuthenticationLogServiceTest {
         final String principal = "testPrincipal";
         final AuthenticationSuccessEvent authenticationEventMock = new AuthenticationSuccessEvent(mock(Authentication.class));
 
-        AuthenticationLogService authenticationLogService = new AuthenticationLogService(Clock.systemDefaultZone(), authenticationLogDao);
+        AuthenticationLogService authenticationLogService = new AuthenticationLogServiceImpl(Clock.systemDefaultZone(), authenticationLogDao);
 
         authenticationLogService.createAuthenticationLogEntryForUserOfType(userId, principal, authenticationEventMock, true);
 

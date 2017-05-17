@@ -14,4 +14,6 @@ public interface AuthenticationLogDao {
     List<AuthenticationLog> findAllByUserId(Long userId);
 
     List<AuthenticationLog> findAllByPrincipal(String principal);
+
+    List<AuthenticationLog> findByUserIdOrderedByIncidentTimestampDesc(Long userId, int limit);
 }
