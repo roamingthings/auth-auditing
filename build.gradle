@@ -55,6 +55,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	compile('org.springframework.boot:spring-boot-starter-web')
+    compile('javax.inject:javax.inject:1')
     compile('org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.0.RELEASE')
     compile('org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.0.RELEASE')
     compile 'org.liquibase:liquibase-core:3.5.0'
@@ -66,6 +67,7 @@ dependencies {
     compileOnly('org.projectlombok:lombok')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.security:spring-security-test')
 }
 
 test {
