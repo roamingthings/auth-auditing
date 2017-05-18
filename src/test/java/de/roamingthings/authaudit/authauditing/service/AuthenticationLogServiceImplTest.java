@@ -65,6 +65,15 @@ public class AuthenticationLogServiceImplTest {
     }
 
     @Test
+    public void should_calculate_series_of_1_unsuccessful_events() throws Exception {
+        List<AuthenticationLog> authenticationLogList = asList(
+                authenticationLogForEventClass(AuthenticationFailureBadCredentialsEvent.class, false)
+        );
+
+        assertUnsuccessfulSeriesSizeForAuthenticationLogList(authenticationLogList, 1);
+    }
+
+    @Test
     public void should_calculate_series_of_no_unsuccessful_events() throws Exception {
         List<AuthenticationLog> authenticationLogList = asList(
                 authenticationLogForEventClass(AuthenticationSuccessEvent.class, true),
@@ -83,7 +92,7 @@ public class AuthenticationLogServiceImplTest {
         when(authenticationLogDao.findByUserIdOrderedByIncidentTimestampDesc(anyLong(), anyInt())).thenReturn(authenticationLogList);
         AuthenticationLogServiceImpl authenticationLogService = new AuthenticationLogServiceImpl(Clock.systemDefaultZone(), authenticationLogDao);
 
-        final int seriesSize = authenticationLogService.unsuccessfulAuthenticationSeriesSize(1L, authenticationLogList.size());
+        final int seriesSize = authenticationLogService.unsuccessfulAuthenticationSeriesSize(1L, 100);
         assertThat(seriesSize, is(expectedSeriesSize));
     }
 

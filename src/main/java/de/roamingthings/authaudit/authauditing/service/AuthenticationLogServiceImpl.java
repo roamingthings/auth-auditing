@@ -48,7 +48,7 @@ public class AuthenticationLogServiceImpl implements AuthenticationLogService {
             OptionalInt indexOpt = IntStream.range(0, authenticationLogs.size())
                     .filter(i -> AuthenticationEventTypePolicy.isSuccessFullAuthenticationEvent(authenticationLogs.get(i)))
                     .findFirst();
-            return indexOpt.orElse(limit);
+            return indexOpt.orElse(authenticationLogs.size());
         } else {
             return 0;
         }
