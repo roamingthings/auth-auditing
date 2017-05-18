@@ -33,8 +33,8 @@ public class UserAccountDetails extends User {
                 userAccount.getUsername(),
                 userAccount.getPasswordHash(),
                 true,
-                false,
-                false,
+                true,
+                true,
                 nonLocked,
                 grantedAuthorities(userAccount),
                 userAccount.getId()

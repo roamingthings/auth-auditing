@@ -27,7 +27,7 @@ public class UserAccountDetailsTest {
         );
         userAccount.setId(1L);
 
-        final UserAccountDetails userDetails = UserAccountDetails.of(userAccount);
+        final UserAccountDetails userDetails = UserAccountDetails.of(userAccount, true);
 
         assertThat(userDetails.getUserId(), is(userAccount.getId()));
         assertThat(userDetails.getUsername(), is(userAccount.getUsername()));
@@ -35,5 +35,9 @@ public class UserAccountDetailsTest {
                 hasProperty("authority", is("ROLE_USER")),
                 hasProperty("authority", is("ROLE_ADMIN"))
         ));
+        assertThat(userDetails.isAccountNonExpired(), is(true));
+        assertThat(userDetails.isAccountNonLocked(), is(true));
+        assertThat(userDetails.isCredentialsNonExpired(), is(true));
+        assertThat(userDetails.isEnabled(), is(true));
     }
 }
