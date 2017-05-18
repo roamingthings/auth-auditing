@@ -44,10 +44,14 @@ public class AuthenticationLogServiceImpl implements AuthenticationLogService {
     public int unsuccessfulAuthenticationSeriesSize(Long userId, int limit) {
         final List<AuthenticationLog> authenticationLogs = authenticationLogHistoryForPrincipal(userId, limit);
 
-        OptionalInt indexOpt = IntStream.range(0, authenticationLogs.size())
-                .filter(i -> AuthenticationEventTypePolicy.isSuccessFullAuthenticationEvent(authenticationLogs.get(i)))
-                .findFirst();
+        if (authenticationLogs.size() > 0) {
+            OptionalInt indexOpt = IntStream.range(0, authenticationLogs.size())
+                    .filter(i -> AuthenticationEventTypePolicy.isSuccessFullAuthenticationEvent(authenticationLogs.get(i)))
+                    .findFirst();
+            return indexOpt.orElse(limit);
+        } else {
+            return 0;
+        }
 
-        return indexOpt.orElse(limit);
     }
 }

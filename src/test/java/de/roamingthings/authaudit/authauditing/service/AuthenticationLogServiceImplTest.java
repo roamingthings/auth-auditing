@@ -12,6 +12,7 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -29,6 +30,13 @@ import static org.mockito.Mockito.when;
 public class AuthenticationLogServiceImplTest {
     @Mock
     private AuthenticationLogDao authenticationLogDao;
+
+    @Test
+    public void should_treat_empty_log_as_0() throws Exception {
+        List<AuthenticationLog> authenticationLogList = Collections.emptyList();
+
+        assertUnsuccessfulSeriesSizeForAuthenticationLogList(authenticationLogList, 0);
+    }
 
     @Test
     public void should_calculate_series_of_4_unsuccessful_events() throws Exception {
