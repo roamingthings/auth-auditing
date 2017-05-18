@@ -83,17 +83,43 @@ public class AuthenticationIT {
     public void should_login_unsuccessful_and_increase_series_size() throws Exception {
         createUserWithPassword("secret");
 
-        assertUnsuccessfulLogin();
+        assertUnsuccessfulLogin("wrong");
 
         final int unsuccessfulAuthenticationCount = authenticationLogService.unsuccessfulAuthenticationSeriesSize(userAccount.getId(), 5);
         assertThat(unsuccessfulAuthenticationCount, is(1));
     }
 
-    private void assertUnsuccessfulLogin() throws Exception {
+    @Test
+    public void should_login_unsuccessful_and_increase_series_size_on_successive_logins() throws Exception {
+        createUserWithPassword("secret");
+
+        assertUnsuccessfulLogin("wrong");
+        assertUnsuccessfulLogin("wrong");
+        assertUnsuccessfulLogin("wrong");
+        assertUnsuccessfulLogin("wrong");
+
+        final int unsuccessfulAuthenticationCount = authenticationLogService.unsuccessfulAuthenticationSeriesSize(userAccount.getId(), 5);
+        assertThat(unsuccessfulAuthenticationCount, is(4));
+    }
+
+    @Test
+    public void should_reject_login_after_too_many_failed_attemps() throws Exception {
+        createUserWithPassword("secret");
+
+        assertUnsuccessfulLogin("wrong");
+        assertUnsuccessfulLogin("wrong");
+        assertUnsuccessfulLogin("wrong");
+        assertUnsuccessfulLogin("wrong");
+        assertUnsuccessfulLogin("wrong");
+
+        assertUnsuccessfulLogin("secret");
+    }
+
+    private void assertUnsuccessfulLogin(String password) throws Exception {
         mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("username", userAccount.getUsername())
-                .param("password", "wrong")
+                .param("password", password)
                 .with(csrf()))
                 .andDo(print())
                 .andExpect(status().isFound())
